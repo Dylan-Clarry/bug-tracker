@@ -1,9 +1,19 @@
 import React from "react";
 
-const BugEntry: React.FC = () => {
+interface IBugEntryProps {
+  bug: Bug;
+}
+
+const BugEntry: React.FC<IBugEntryProps> = ({ bug }) => {
   return (
     <div className="BugEntry">
       <h2>Bug Entry</h2>
+      <ul className="underline">
+        <li>{bug.id}</li>
+        <li>{bug.title}</li>
+        <li>{bug.text}</li>
+        <li>{bug.closed}</li>
+      </ul>
     </div>
   );
 };
