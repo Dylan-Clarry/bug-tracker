@@ -7,6 +7,7 @@ module.exports = {
         "cat-base": "#1e1e2e",
         "cat-surface0": "#313244",
         "cat-overlay0": "#6c7086",
+        "cat-subtext0": "#a6adc8",
         "cat-text": "#cdd6f4",
         "cat-sapphire": "#74c7ec",
         "cat-green": "#a6e3a1",
