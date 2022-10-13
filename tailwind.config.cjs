@@ -10,6 +10,7 @@ module.exports = {
         "cat-text": "#cdd6f4",
         "cat-sapphire": "#74c7ec",
         "cat-green": "#a6e3a1",
+        "cat-red": "#f38ba8",
       },
     },
   },
