@@ -12,13 +12,14 @@ const testBugList: Bug[] = [
 
 const BugList: React.FC = () => {
   return (
-    <div className="BugList">
-      <h1>BugList</h1>
-      <ul>
-        {testBugList.map((bug) => {
-          return <BugEntry bug={bug} />;
-        })}
-      </ul>
+    <div className="BugList flex">
+      <div className="mt-10 mx-72 w-full border-solid border-2 border-cat-overlay0 rounded">
+        <ul>
+          {testBugList.map((bug) => {
+            return <BugEntry bug={bug} />;
+          })}
+        </ul>
+      </div>
     </div>
   );
 };
