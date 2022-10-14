@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faCircle,
@@ -29,6 +30,9 @@ const BugEntry: React.FC<IBugEntryProps> = ({ bug }) => {
             </div>
             <div className="px-3 grow">
                 <h1>{" " + bug.title}</h1>
+                <Link to={`/bug/${bug.id}`} state={{ bug: bug }}>
+                    Link
+                </Link>
                 <p>{bug.text}</p>
             </div>
             <div className="pr-2">

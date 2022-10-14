@@ -23,8 +23,10 @@ const Home: React.FC = () => {
 
     return (
         <div className="Home">
-            <Form bugList={bugList} setBugList={setBugList} />
-            <BugList bugList={bugList} setBugList={setBugList} />
+            <div className="App h-screen bg-cat-base text-cat-text">
+                <Form bugList={bugList} setBugList={setBugList} />
+                <BugList bugList={bugList} setBugList={setBugList} />
+            </div>
         </div>
     );
 };
