@@ -1,6 +1,6 @@
 type Bug = {
-  id: number;
-  title: string;
-  text: string;
-  closed: boolean;
+    id: number;
+    title: string;
+    text: string;
+    closed: boolean;
 };
