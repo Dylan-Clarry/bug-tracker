@@ -10,14 +10,16 @@ const Form: React.FC<IFormProps> = ({ bugList, setBugList }) => {
     const [text, setText] = useState("");
 
     const handleSubmit = () => {
-        console.log(title, text);
+        const id = Math.floor(Math.random() * 10000);
         const newBug: Bug = {
-            id: 10,
+            id: id,
             closed: false,
             title: title,
             text: text,
         };
         setBugList([...bugList, newBug]);
+        setTitle("");
+        setText("");
     };
 
     return (
