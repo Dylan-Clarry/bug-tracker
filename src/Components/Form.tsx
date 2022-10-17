@@ -1,8 +1,8 @@
-import React, { useState, Dispatch, SetStateAction } from "react";
+import React, { useState, SetStateAction } from "react";
 
 interface IFormProps {
     bugList: Bug[];
-    setBugList: Dispatch<SetStateAction<Bug[]>>;
+    setBugList: React.Dispatch<SetStateAction<Bug[]>>;
 }
 
 const Form: React.FC<IFormProps> = ({ bugList, setBugList }) => {

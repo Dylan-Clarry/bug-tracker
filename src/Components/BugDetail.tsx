@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,7 +10,7 @@ import {
 interface IBugEntryProps {
     bug: Bug;
     bugList: Bug[];
-    setBugList: Dispatch<SetStateAction<Bug[]>>;
+    setBugList: React.Dispatch<SetStateAction<Bug[]>>;
 }
 
 const BugDetail: React.FC<IBugEntryProps> = ({ bug, bugList, setBugList }) => {

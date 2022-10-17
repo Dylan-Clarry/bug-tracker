@@ -1,9 +1,9 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { SetStateAction } from "react";
 import BugDetail from "./BugDetail";
 
 interface IBugListProps {
     bugList: Bug[];
-    setBugList: Dispatch<SetStateAction<Bug[]>>;
+    setBugList: React.Dispatch<SetStateAction<Bug[]>>;
 }
 
 const BugList: React.FC<IBugListProps> = ({ bugList, setBugList }) => {
