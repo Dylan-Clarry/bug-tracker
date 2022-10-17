@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,10 +9,11 @@ import {
 
 interface IBugEntryProps {
     bug: Bug;
-    key: number;
+    bugList: Bug[];
+    setBugList: Dispatch<SetStateAction<Bug[]>>;
 }
 
-const BugEntry: React.FC<IBugEntryProps> = ({ bug }) => {
+const BugDetail: React.FC<IBugEntryProps> = ({ bug, bugList, setBugList }) => {
     return (
         <div className="BugEntry flex flex-row py-3">
             <div className="pl-2">
@@ -29,9 +30,14 @@ const BugEntry: React.FC<IBugEntryProps> = ({ bug }) => {
                 )}
             </div>
             <div className="px-3 grow">
-                <h1>{" " + bug.title}</h1>
-                <Link to={`/bug/${bug.id}`} state={{ bug: bug }}>
-                    Link
+                <Link
+                    to={`/bug/${bug.id}`}
+                    state={{
+                        bug: bug,
+                        bugList: bugList,
+                    }}
+                >
+                    <h1 className="underline">{" " + bug.title}</h1>
                 </Link>
                 <p>{bug.text}</p>
             </div>
@@ -45,4 +51,4 @@ const BugEntry: React.FC<IBugEntryProps> = ({ bug }) => {
     );
 };
 
-export default BugEntry;
+export default BugDetail;
