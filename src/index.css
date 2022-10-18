@@ -4,3 +4,12 @@
 
 :root {
 }
+
+@layer components {
+    input,
+    textarea,
+    button,
+    select {
+        @apply text-cat-surface0;
+    }
+}

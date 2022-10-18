@@ -24,7 +24,7 @@ const Form: React.FC<IFormProps> = ({ bugList, setBugList }) => {
 
     return (
         <div className="flex">
-            <div className="mt-10 mx-72 p-3 w-full border-solid border-2 border-cat-overlay0 rounded">
+            <div className="mx-2 md:container md:mx-72 mt-10 p-3 w-full border-solid border-2 border-cat-overlay0 rounded">
                 <h1>Create New Bug</h1>
                 <form
                     className="flex flex-col space-y-3"
@@ -33,23 +33,21 @@ const Form: React.FC<IFormProps> = ({ bugList, setBugList }) => {
                         handleSubmit();
                     }}
                 >
-                    <label htmlFor="title">
-                        Title
-                        <input
-                            id="title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                        />
-                    </label>
-                    <label htmlFor="text">
-                        Text
-                        <input
-                            id="text"
-                            value={text}
-                            onChange={(e) => setText(e.target.value)}
-                        />
-                    </label>
-                    <button>Submit</button>
+                    <label htmlFor="title">Title</label>
+                    <input
+                        className="max-w-[50%]"
+                        id="title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                    <label htmlFor="text">Text</label>
+                    <textarea
+                        className="max-w-[50%] h-32"
+                        id="text"
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                    />
+                    <button className="bg-cat-green max-w-[25%]">Submit</button>
                 </form>
             </div>
         </div>
