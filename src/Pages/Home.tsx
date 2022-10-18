@@ -15,13 +15,17 @@ const Home: React.FC<IHomeProps> = ({
     filteredBugList,
     setStatus,
 }) => {
+    const handleSelectStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setStatus(e.target.value.toUpperCase());
+    };
+
     return (
         <div className="Home">
             <Form bugList={bugList} setBugList={setBugList} />
             <div className="flex">
                 <div className="mt-10 mx-72 w-full border-solid border-2 border-cat-overlay0 rounded">
                     <div className="bug-list-bar">
-                        <select>
+                        <select onChange={handleSelectStatus}>
                             <option>All</option>
                             <option>Open</option>
                             <option>Closed</option>
