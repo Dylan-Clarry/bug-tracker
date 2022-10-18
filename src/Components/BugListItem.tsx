@@ -13,7 +13,11 @@ interface IBugEntryProps {
     setBugList: React.Dispatch<SetStateAction<Bug[]>>;
 }
 
-const BugDetail: React.FC<IBugEntryProps> = ({ bug, bugList, setBugList }) => {
+const BugListItem: React.FC<IBugEntryProps> = ({
+    bug,
+    bugList,
+    setBugList,
+}) => {
     return (
         <div className="BugEntry flex flex-row py-3">
             <div className="pl-2">
@@ -37,7 +41,7 @@ const BugDetail: React.FC<IBugEntryProps> = ({ bug, bugList, setBugList }) => {
                         bugList: bugList,
                     }}
                 >
-                    <h1 className="underline">{" " + bug.title}</h1>
+                    <h1 className="text-lg underline">{" " + bug.title}</h1>
                 </Link>
                 <p>{bug.text}</p>
             </div>
@@ -51,4 +55,4 @@ const BugDetail: React.FC<IBugEntryProps> = ({ bug, bugList, setBugList }) => {
     );
 };
 
-export default BugDetail;
+export default BugListItem;

@@ -1,20 +1,17 @@
 import React, { SetStateAction } from "react";
-import { useLocation, Link, Navigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 interface IBugPageProps {
     bugList: Bug[];
     setBugList: React.Dispatch<SetStateAction<Bug[]>>;
 }
 
-const BugPage: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
+const BugDetail: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
     const state = useLocation().state;
     const bug: Bug = state.bug;
 
-    console.log("htns", bugList, setBugList);
-
     const handleDeleteBug = () => {
         setBugList(bugList.filter((bugItem: Bug) => bugItem.id !== bug.id));
-        return <Navigate to="/home" />;
     };
 
     return (
@@ -42,4 +39,4 @@ const BugPage: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
     );
 };
 
-export default BugPage;
+export default BugDetail;

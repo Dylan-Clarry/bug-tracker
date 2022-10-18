@@ -13,9 +13,9 @@ const Form: React.FC<IFormProps> = ({ bugList, setBugList }) => {
         const id = Math.floor(Math.random() * 10000);
         const newBug: Bug = {
             id: id,
-            closed: false,
             title: title,
             text: text,
+            closed: false,
         };
         setBugList([...bugList, newBug]);
         setTitle("");
