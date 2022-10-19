@@ -3,21 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import BugDetail from "./Pages/BugDetail";
 
-const testBugList: Bug[] = [
-    {
-        id: 1,
-        title: "Test Bug",
-        text: "This is a test and you failed the test!!!",
-        closed: false,
-    },
-    {
-        id: 2,
-        title: "Test 2",
-        text: "How about another?",
-        closed: true,
-    },
-];
-
 function App() {
     const [bugList, setBugList] = useState<Bug[]>(
         JSON.parse(localStorage.getItem("bugList") || "[]")
@@ -39,18 +24,6 @@ function App() {
         }
     };
 
-    // Run once on startup
-    useEffect(() => {
-        getLocalBugList();
-    }, []);
-
-    useEffect(() => {
-        handleFilterBugList();
-        if (bugList) {
-            setLocalBugList();
-        }
-    }, [status, bugList]);
-
     const setLocalBugList = () => {
         localStorage.setItem("bugList", JSON.stringify(bugList));
     };
@@ -62,11 +35,21 @@ function App() {
             let bugListLocal: Bug[] = JSON.parse(
                 localStorage.getItem("bugList") || "[]"
             );
-            console.log("bugListLocal", bugListLocal);
             setBugList(bugListLocal);
-            console.log("bugList", bugList);
         }
     };
+
+    // Run once on startup
+    useEffect(() => {
+        getLocalBugList();
+    }, []);
+
+    useEffect(() => {
+        handleFilterBugList();
+        if (bugList) {
+            setLocalBugList();
+        }
+    }, [status, bugList]);
 
     return (
         <div className="App h-screen bg-cat-base text-cat-text">
