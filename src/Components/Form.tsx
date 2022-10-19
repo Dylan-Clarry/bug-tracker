@@ -24,7 +24,7 @@ const Form: React.FC<IFormProps> = ({ bugList, setBugList }) => {
 
     return (
         <div className="flex">
-            <div className="mx-2 md:container md:mx-72 mt-10 p-3 w-full border-solid border-2 border-cat-overlay0 rounded">
+            <div className="ic-border-container p-3">
                 <h1>Create New Bug</h1>
                 <form
                     className="flex flex-col space-y-3"

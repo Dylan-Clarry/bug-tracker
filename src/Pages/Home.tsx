@@ -23,8 +23,8 @@ const Home: React.FC<IHomeProps> = ({
         <div className="Home">
             <Form bugList={bugList} setBugList={setBugList} />
             <div className="flex">
-                <div className="mx-2 md:container md:mx-72 mt-10 w-full border-solid border-2 border-cat-overlay0 rounded">
-                    <div className="bug-list-bar p-3">
+                <div className="ic-border-container">
+                    <div className="flex justify-between p-3">
                         <input placeholder="Search" />
                         <select onChange={handleSelectStatus}>
                             <option>All</option>

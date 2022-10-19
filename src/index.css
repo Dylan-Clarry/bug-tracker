@@ -2,14 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-}
-
 @layer components {
     input,
     textarea,
     button,
     select {
-        @apply text-cat-surface0;
+        @apply text-cat-surface0 rounded;
+    }
+
+    .ic-border-container {
+        @apply mx-2 md:container md:mx-72 mt-10 w-full border-solid border-2 border-cat-overlay0 rounded;
     }
 }

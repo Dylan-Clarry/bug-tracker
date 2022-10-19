@@ -1,5 +1,7 @@
 import React, { SetStateAction } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 interface IBugPageProps {
     bugList: Bug[];
@@ -16,14 +18,32 @@ const BugDetail: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
 
     return (
         <div className="BugList flex">
-            <div className="mt-10 mx-72 p-3 w-full border-solid border-2 border-cat-overlay0 rounded">
+            <div className="ic-border-container p-3">
                 <Link to="/">
                     <small className="underline">&lt;-Back</small>
                 </Link>
                 <br />
-                <small>#{bug.id}</small>
-                <h1>{bug.title}</h1>
-                <p>{bug.text}</p>
+
+                <div>
+                    <small>
+                        <span className="pr-2">
+                            {bug.closed ? (
+                                <FontAwesomeIcon
+                                    className="text-cat-red"
+                                    icon={faCircleXmark}
+                                />
+                            ) : (
+                                <FontAwesomeIcon
+                                    className="text-cat-green"
+                                    icon={faCircle}
+                                />
+                            )}
+                        </span>
+                        Bug #{bug.id}
+                    </small>
+                    <h1 className="underline text-lg my-3">{bug.title}</h1>
+                    <p className="my-3">{bug.text}</p>
+                </div>
 
                 <button
                     onClick={(e: React.FormEvent) => {
