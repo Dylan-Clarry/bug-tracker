@@ -19,7 +19,9 @@ const testBugList: Bug[] = [
 ];
 
 function App() {
-    const [bugList, setBugList] = useState<Bug[]>(testBugList);
+    const [bugList, setBugList] = useState<Bug[]>(
+        JSON.parse(localStorage.getItem("bugList") || "[]")
+    );
     const [filteredBugList, setFilteredBugList] = useState<Bug[]>(bugList);
     const [status, setStatus] = useState<string>("all");
 
@@ -37,9 +39,34 @@ function App() {
         }
     };
 
+    // Run once on startup
+    useEffect(() => {
+        getLocalBugList();
+    }, []);
+
     useEffect(() => {
         handleFilterBugList();
+        if (bugList) {
+            setLocalBugList();
+        }
     }, [status, bugList]);
+
+    const setLocalBugList = () => {
+        localStorage.setItem("bugList", JSON.stringify(bugList));
+    };
+
+    const getLocalBugList = () => {
+        if (localStorage.getItem("bugList") === null) {
+            localStorage.setItem("bugList", JSON.stringify([]));
+        } else {
+            let bugListLocal: Bug[] = JSON.parse(
+                localStorage.getItem("bugList") || "[]"
+            );
+            console.log("bugListLocal", bugListLocal);
+            setBugList(bugListLocal);
+            console.log("bugList", bugList);
+        }
+    };
 
     return (
         <div className="App h-screen bg-cat-base text-cat-text">

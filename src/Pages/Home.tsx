@@ -28,8 +28,8 @@ const Home: React.FC<IHomeProps> = ({
                         <input placeholder="Search" />
                         <select onChange={handleSelectStatus}>
                             <option>All</option>
-                            <option>Open</option>
-                            <option>Closed</option>
+                            <option className="bg-cat-green">Open</option>
+                            <option className="bg-cat-mauve">Closed</option>
                         </select>
                     </div>
                     <ul>
@@ -39,7 +39,6 @@ const Home: React.FC<IHomeProps> = ({
                                 <BugListItem
                                     bug={bug}
                                     bugList={bugList}
-                                    setBugList={setBugList}
                                     key={bug.id}
                                 />
                             );

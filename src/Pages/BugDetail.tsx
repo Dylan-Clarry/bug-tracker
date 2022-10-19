@@ -1,7 +1,7 @@
 import React, { SetStateAction } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
 interface IBugPageProps {
     bugList: Bug[];
@@ -29,8 +29,8 @@ const BugDetail: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
                         <span className="pr-2">
                             {bug.closed ? (
                                 <FontAwesomeIcon
-                                    className="text-cat-red"
-                                    icon={faCircleXmark}
+                                    className="text-cat-mauve"
+                                    icon={faCircle}
                                 />
                             ) : (
                                 <FontAwesomeIcon
