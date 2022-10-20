@@ -1,5 +1,5 @@
 import React, { useState, SetStateAction } from "react";
-import { useLocation, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
@@ -57,8 +57,10 @@ const BugDetail: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
         setBugList([...preBugList, updatedBug]);
     };
 
+    const navigate = useNavigate();
     const handleDeleteBug = () => {
         setBugList(bugList.filter((bugItem: Bug) => bugItem.id !== bug.id));
+        navigate("/");
     };
 
     return (
