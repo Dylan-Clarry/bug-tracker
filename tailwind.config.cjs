@@ -13,6 +13,7 @@ module.exports = {
                 "cat-green": "#a6e3a1",
                 "cat-red": "#f38ba8",
                 "cat-mauve": "#cba6f7",
+                "cat-peach": "#fab387",
             },
         },
     },
