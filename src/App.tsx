@@ -7,19 +7,46 @@ function App() {
     const [bugList, setBugList] = useState<Bug[]>(
         JSON.parse(localStorage.getItem("bugList") || "[]")
     );
+    const [searchTerm, setSearchTerm] = useState<string>("");
     const [filteredBugList, setFilteredBugList] = useState<Bug[]>(bugList);
     const [status, setStatus] = useState<string>("all");
 
     const handleFilterBugList = () => {
         switch (status) {
             case "OPEN":
-                setFilteredBugList(bugList.filter((bug: Bug) => !bug.closed));
+                setFilteredBugList(
+                    bugList.filter((bug: Bug) => {
+                        if (searchTerm === "") return !bug.closed;
+                        return (
+                            !bug.closed &&
+                            bug.title
+                                .toLowerCase()
+                                .includes(searchTerm.toLowerCase())
+                        );
+                    })
+                );
                 break;
             case "CLOSED":
-                setFilteredBugList(bugList.filter((bug: Bug) => bug.closed));
+                setFilteredBugList(
+                    bugList.filter((bug: Bug) => {
+                        if (searchTerm === "") return bug.closed;
+                        return (
+                            bug.closed &&
+                            bug.title
+                                .toLowerCase()
+                                .includes(searchTerm.toLowerCase())
+                        );
+                    })
+                );
                 break;
             default:
-                setFilteredBugList(bugList);
+                setFilteredBugList(
+                    bugList.filter((bug: Bug) => {
+                        return bug.title
+                            .toLowerCase()
+                            .includes(searchTerm.toLowerCase());
+                    })
+                );
                 break;
         }
     };
@@ -51,6 +78,10 @@ function App() {
         }
     }, [status, bugList]);
 
+    useEffect(() => {
+        handleFilterBugList();
+    }, [searchTerm]);
+
     return (
         <div className="App h-screen bg-cat-base text-cat-text">
             <BrowserRouter>
@@ -63,6 +94,8 @@ function App() {
                                 setBugList={setBugList}
                                 filteredBugList={filteredBugList}
                                 setStatus={setStatus}
+                                searchTerm={searchTerm}
+                                setSearchTerm={setSearchTerm}
                             />
                         }
                     />

@@ -7,6 +7,8 @@ interface IHomeProps {
     setBugList: React.Dispatch<SetStateAction<Bug[]>>;
     filteredBugList: Bug[];
     setStatus: React.Dispatch<SetStateAction<string>>;
+    searchTerm: string;
+    setSearchTerm: React.Dispatch<SetStateAction<string>>;
 }
 
 const Home: React.FC<IHomeProps> = ({
@@ -14,6 +16,8 @@ const Home: React.FC<IHomeProps> = ({
     setBugList,
     filteredBugList,
     setStatus,
+    searchTerm,
+    setSearchTerm,
 }) => {
     const handleSelectStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setStatus(e.target.value.toUpperCase());
@@ -25,7 +29,11 @@ const Home: React.FC<IHomeProps> = ({
             <div className="flex">
                 <div className="ic-border-container">
                     <div className="flex justify-between p-3">
-                        <input placeholder="Search" />
+                        <input
+                            placeholder="Search"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                         <select onChange={handleSelectStatus}>
                             <option>All</option>
                             <option className="bg-cat-green">Open</option>
