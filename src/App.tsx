@@ -3,13 +3,32 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import BugDetail from "./Pages/BugDetail";
 
+const apiUrl = "http://localhost:6969/bug";
+
 function App() {
-    const [bugList, setBugList] = useState<Bug[]>(
-        JSON.parse(localStorage.getItem("bugList") || "[]")
-    );
+    function getBugsFromStorage(): Array<Bug> {
+        return JSON.parse(localStorage.getItem("bugList") || "[]");
+    }
+
+    const [bugList, setBugList] = useState<Bug[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [filteredBugList, setFilteredBugList] = useState<Bug[]>(bugList);
     const [status, setStatus] = useState<string>("all");
+
+    function requestBugList(): void {
+        const opts = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        fetch(apiUrl, opts)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("data:", data.data);
+                setBugList(data.data);
+            });
+    }
 
     const handleFilterBugList = () => {
         switch (status) {
@@ -68,7 +87,8 @@ function App() {
 
     // Run once on startup
     useEffect(() => {
-        getLocalBugList();
+        requestBugList();
+        console.log("bugList:", bugList);
     }, []);
 
     useEffect(() => {
