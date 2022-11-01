@@ -1,5 +1,7 @@
 import React, { useState, SetStateAction } from "react";
 
+const apiUrl = "http://localhost:6969";
+
 interface IFormProps {
     bugList: Bug[];
     setBugList: React.Dispatch<SetStateAction<Bug[]>>;
@@ -9,18 +11,31 @@ const Form: React.FC<IFormProps> = ({ bugList, setBugList }) => {
     const [title, setTitle] = useState("");
     const [text, setText] = useState("");
 
-    const handleSubmit = () => {
-        const id = Math.floor(Math.random() * 10000);
+    async function handleSubmit() {
         const newBug: Bug = {
-            id: id,
+            id: -1,
             title: title,
             text: text,
             closed: false,
         };
-        setBugList([...bugList, newBug]);
+        const opts = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newBug),
+        };
+        const url = `${apiUrl}/bug`;
+        const res = await fetch(url, opts);
+        const json = await res.json();
+        if (json.error) {
+            console.error("Error creating new bug:", json.error);
+            return;
+        }
+        setBugList([...bugList, json.data[0]]);
         setTitle("");
         setText("");
-    };
+    }
 
     return (
         <div className="flex">

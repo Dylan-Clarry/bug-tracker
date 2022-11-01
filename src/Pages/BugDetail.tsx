@@ -1,4 +1,4 @@
-import React, { useState, SetStateAction } from "react";
+import React, { useState, useEffect, SetStateAction } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
@@ -15,7 +15,28 @@ interface IBugPageProps {
 }
 
 const BugDetail: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
-    const getBugById = (paramId: number) => {
+    const { id } = useParams<keyof IParams>() as IParams;
+    const [bug, setBug] = useState<Bug>({
+        id: -1,
+        title: "",
+        text: "",
+        closed: true,
+    } as Bug);
+    const navigate = useNavigate();
+    const [editTitle, setEditTitle] = useState<string>(bug.title);
+    const [editText, setEditText] = useState<string>(bug.text);
+    const [editMode, setEditMode] = useState<boolean>(false);
+
+    useEffect(() => {
+        requestBugById(+id);
+    }, []);
+
+    useEffect(() => {
+        requestBugById(+id);
+    }, [bugList]);
+
+    // will keep this here to implement caching later
+    function getBugById(paramId: number) {
         let bugList: Bug[] = JSON.parse(
             localStorage.getItem("bugList") || "[]"
         );
@@ -31,40 +52,62 @@ const BugDetail: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
             closed: true,
         };
         return bug;
-    };
-    const { id } = useParams<keyof IParams>() as IParams;
-    const bug: Bug = getBugById(+id);
-
-    const navigate = useNavigate();
-    const [editTitle, setEditTitle] = useState<string>(bug.title);
-    const [editText, setEditText] = useState<string>(bug.text);
-    const [editMode, setEditMode] = useState<boolean>(false);
-
-    async function requestBugById(paramId: number): Promise<void> {
-        const res = await fetch(`${apiUrl}bug/${paramId}`);
-        const json = await res.json();
-        setBugList(json.data);
     }
 
-    const handleUpdateBug = () => {
-        const preBugList = bugList.filter((bug) => bug.id !== +id);
-        const updatedBug = {
-            ...bug,
-            title: editTitle,
-            text: editText,
+    async function requestBugById(paramId: number): Promise<void> {
+        const opts = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
         };
-        setBugList([...preBugList, updatedBug]);
-        setEditMode(!editMode);
-    };
+        const url = `${apiUrl}/bug/${paramId}`;
+        const res = await fetch(url, opts);
+        const json = await res.json();
+        if (json.error) {
+            console.log("Error requesting bug:", json.error, "url:", url);
+            return;
+        }
+        if (json.data) {
+            setBug(json.data as Bug);
+        }
+    }
 
-    const handleBugStatusUpdate = () => {
-        const preBugList = bugList.filter((bug) => bug.id !== +id);
-        const updatedBug = {
-            ...bug,
-            closed: !bug.closed,
+    async function handleBugUpdate(action: string) {
+        const updatedBug =
+            action === "status"
+                ? {
+                      ...bug,
+                      closed: !bug.closed,
+                  }
+                : {
+                      ...bug,
+                      title: editTitle,
+                      text: editText,
+                  };
+        const opts = {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedBug),
         };
+        const res = await fetch(`${apiUrl}/bug/${bug.id}`, opts);
+        const json = await res.json();
+        if (json.error) {
+            console.error(
+                `PUT Error from request sent to ${apiUrl}/bug/${bug.id}`,
+                opts,
+                json.error
+            );
+            return;
+        }
+        const preBugList = bugList.filter((bug) => bug.id !== +id);
         setBugList([...preBugList, updatedBug]);
-    };
+        if (action === "edit") {
+            setEditMode(!editMode);
+        }
+    }
 
     async function handleDeleteBug() {
         const opts = {
@@ -73,7 +116,6 @@ const BugDetail: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
                 "Content-Type": "application/json",
             },
         };
-        console.log("url", `${apiUrl}/bug/${bug.id}`);
         const res = await fetch(`${apiUrl}/bug/${bug.id}`, opts);
         const json = await res.json();
         if (!json.error) {
@@ -85,112 +127,116 @@ const BugDetail: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
     }
 
     return (
-        <div className="BugList flex">
-            <div className="ic-border-container p-3">
-                <Link to="/">
-                    <small className="underline">&lt;-Back</small>
-                </Link>
-                <br />
+        <div className="h-screen">
+            <div className="BugList flex">
+                <div className="ic-border-container p-3">
+                    <Link to="/">
+                        <small className="underline">&lt;-Back</small>
+                    </Link>
+                    <br />
 
-                {bug.id === -1 ? (
-                    <div>
-                        <h1>Error retrieving bug #{+id}</h1>
-                    </div>
-                ) : (
-                    <div>
+                    {bug.id === -1 ? (
                         <div>
-                            <small>
-                                <span className="pr-2">
-                                    {bug.closed ? (
-                                        <FontAwesomeIcon
-                                            className="text-cat-mauve"
-                                            icon={faCircle}
-                                        />
-                                    ) : (
-                                        <FontAwesomeIcon
-                                            className="text-cat-green"
-                                            icon={faCircle}
-                                        />
-                                    )}
-                                </span>
-                                Bug #{bug.id}
-                            </small>
+                            <h1>Loading...</h1>
+                        </div>
+                    ) : (
+                        <div>
+                            <div>
+                                <small>
+                                    <span className="pr-2">
+                                        {bug.closed ? (
+                                            <FontAwesomeIcon
+                                                className="text-cat-mauve"
+                                                icon={faCircle}
+                                            />
+                                        ) : (
+                                            <FontAwesomeIcon
+                                                className="text-cat-green"
+                                                icon={faCircle}
+                                            />
+                                        )}
+                                    </span>
+                                    Bug #{bug.id}
+                                </small>
 
+                                {editMode ? (
+                                    <>
+                                        <br />
+                                        <input
+                                            className="underline text-lg my-3"
+                                            value={editTitle}
+                                            onChange={(e) => {
+                                                setEditTitle(e.target.value);
+                                            }}
+                                        />
+                                        <br />
+                                        <textarea
+                                            className="my-3"
+                                            value={editText}
+                                            onChange={(e) => {
+                                                setEditText(e.target.value);
+                                            }}
+                                        />
+                                        <br />
+                                    </>
+                                ) : (
+                                    <>
+                                        <h1 className="underline text-lg my-3">
+                                            {bug.title}
+                                        </h1>
+                                        <p className="my-3">{bug.text}</p>
+                                    </>
+                                )}
+                            </div>
+
+                            <button
+                                onClick={(e: React.FormEvent) => {
+                                    e.preventDefault();
+                                    setEditMode(!editMode);
+                                }}
+                                className="mt-3 p-1 mr-2 bg-cat-sapphire rounded"
+                            >
+                                {!editMode ? "Edit Bug" : "Cancel edit"}
+                            </button>
+                            <button
+                                onClick={(e: React.FormEvent) => {
+                                    e.preventDefault();
+                                    handleBugUpdate("status");
+                                }}
+                                className={
+                                    "mt-3 p-1 mr-2 rounded " +
+                                    (!bug.closed
+                                        ? "bg-cat-mauve"
+                                        : "bg-cat-green")
+                                }
+                            >
+                                {bug.closed ? "Open Bug" : "Close Bug"}
+                            </button>
                             {editMode ? (
                                 <>
-                                    <br />
-                                    <input
-                                        className="underline text-lg my-3"
-                                        value={editTitle}
-                                        onChange={(e) => {
-                                            setEditTitle(e.target.value);
+                                    <button
+                                        onClick={(e: React.FormEvent) => {
+                                            e.preventDefault();
+                                            handleBugUpdate("edit");
                                         }}
-                                    />
-                                    <br />
-                                    <textarea
-                                        className="my-3"
-                                        value={editText}
-                                        onChange={(e) => {
-                                            setEditText(e.target.value);
+                                        className="mt-3 mr-2 p-1 bg-cat-peach rounded"
+                                    >
+                                        Confirm Edit
+                                    </button>
+                                    <button
+                                        onClick={(e: React.FormEvent) => {
+                                            e.preventDefault();
+                                            handleDeleteBug();
                                         }}
-                                    />
-                                    <br />
+                                        className="mt-3 p-1 bg-cat-red rounded"
+                                    >
+                                        Delete Bug
+                                    </button>
                                 </>
-                            ) : (
-                                <>
-                                    <h1 className="underline text-lg my-3">
-                                        {bug.title}
-                                    </h1>
-                                    <p className="my-3">{bug.text}</p>
-                                </>
-                            )}
+                            ) : null}
                         </div>
-
-                        <button
-                            onClick={(e: React.FormEvent) => {
-                                e.preventDefault();
-                                setEditMode(!editMode);
-                            }}
-                            className="mt-3 p-1 mr-2 bg-cat-sapphire rounded"
-                        >
-                            {!editMode ? "Edit Bug" : "Cancel edit"}
-                        </button>
-                        <button
-                            onClick={(e: React.FormEvent) => {
-                                e.preventDefault();
-                                handleBugStatusUpdate();
-                            }}
-                            className={
-                                "mt-3 p-1 mr-2 rounded " +
-                                (!bug.closed ? "bg-cat-mauve" : "bg-cat-green")
-                            }
-                        >
-                            {bug.closed ? "Open Bug" : "Close Bug"}
-                        </button>
-                        {editMode ? (
-                            <>
-                                <button
-                                    onClick={(e: React.FormEvent) => {
-                                        e.preventDefault();
-                                        handleUpdateBug();
-                                    }}
-                                    className="mt-3 mr-2 p-1 bg-cat-peach rounded"
-                                >
-                                    Confirm Edit
-                                </button>
-                                <button
-                                    onClick={(e: React.FormEvent) => {
-                                        e.preventDefault();
-                                        handleDeleteBug();
-                                    }}
-                                    className="mt-3 p-1 bg-cat-red rounded"
-                                >
-                                    Delete Bug
-                                </button>
-                            </>
-                        ) : null}
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </div>
     );

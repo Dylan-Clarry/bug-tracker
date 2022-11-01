@@ -25,7 +25,6 @@ function App() {
         fetch(apiUrl + "bug", opts)
             .then((response) => response.json())
             .then((data) => {
-                console.log("data:", data.data);
                 setBugList(data.data);
             });
     }
@@ -102,7 +101,7 @@ function App() {
     }, [searchTerm]);
 
     return (
-        <div className="App h-screen bg-cat-base text-cat-text">
+        <div className="App bg-cat-base text-cat-text">
             <BrowserRouter>
                 <Routes>
                     <Route
