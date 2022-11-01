@@ -3,6 +3,8 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
+const apiUrl = "http://localhost:6969";
+
 interface IParams {
     id: string;
 }
@@ -33,9 +35,16 @@ const BugDetail: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
     const { id } = useParams<keyof IParams>() as IParams;
     const bug: Bug = getBugById(+id);
 
+    const navigate = useNavigate();
     const [editTitle, setEditTitle] = useState<string>(bug.title);
     const [editText, setEditText] = useState<string>(bug.text);
     const [editMode, setEditMode] = useState<boolean>(false);
+
+    async function requestBugById(paramId: number): Promise<void> {
+        const res = await fetch(`${apiUrl}bug/${paramId}`);
+        const json = await res.json();
+        setBugList(json.data);
+    }
 
     const handleUpdateBug = () => {
         const preBugList = bugList.filter((bug) => bug.id !== +id);
@@ -57,11 +66,23 @@ const BugDetail: React.FC<IBugPageProps> = ({ bugList, setBugList }) => {
         setBugList([...preBugList, updatedBug]);
     };
 
-    const navigate = useNavigate();
-    const handleDeleteBug = () => {
-        setBugList(bugList.filter((bugItem: Bug) => bugItem.id !== bug.id));
-        navigate("/");
-    };
+    async function handleDeleteBug() {
+        const opts = {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        console.log("url", `${apiUrl}/bug/${bug.id}`);
+        const res = await fetch(`${apiUrl}/bug/${bug.id}`, opts);
+        const json = await res.json();
+        if (!json.error) {
+            setBugList(bugList.filter((bugItem: Bug) => bugItem.id !== bug.id));
+            navigate("/");
+        } else {
+            console.error("Error:", json.error);
+        }
+    }
 
     return (
         <div className="BugList flex">

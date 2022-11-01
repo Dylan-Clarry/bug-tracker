@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import BugDetail from "./Pages/BugDetail";
 
-const apiUrl = "http://localhost:6969/bug";
+const apiUrl = "http://localhost:6969/";
 
 function App() {
     function getBugsFromStorage(): Array<Bug> {
@@ -22,7 +22,7 @@ function App() {
                 "Content-Type": "application/json",
             },
         };
-        fetch(apiUrl, opts)
+        fetch(apiUrl + "bug", opts)
             .then((response) => response.json())
             .then((data) => {
                 console.log("data:", data.data);
@@ -88,7 +88,6 @@ function App() {
     // Run once on startup
     useEffect(() => {
         requestBugList();
-        console.log("bugList:", bugList);
     }, []);
 
     useEffect(() => {
