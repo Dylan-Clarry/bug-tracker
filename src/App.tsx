@@ -105,8 +105,9 @@ function App(): React.ReactNode {
         <div className="App bg-cat-base text-cat-text">
             <BrowserRouter>
                 <Routes>
+                    <Route path="/" element={<Login />}></Route>
                     <Route
-                        path="/"
+                        path="/home"
                         element={
                             <BugList
                                 bugList={bugList}
@@ -118,7 +119,6 @@ function App(): React.ReactNode {
                             />
                         }
                     />
-                    <Route path="/login" element={<Login />}></Route>
                     <Route
                         path="/bug/:id"
                         element={

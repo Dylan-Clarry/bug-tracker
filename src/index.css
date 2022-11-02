@@ -14,3 +14,7 @@
         @apply mx-2 md:container md:mx-72 mt-10 w-full border-solid border-2 border-cat-overlay0 rounded;
     }
 }
+
+.css-neg-m {
+    margin-left: -1.5rem;
+}
