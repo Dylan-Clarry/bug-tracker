@@ -2,7 +2,7 @@ import React, { SetStateAction } from "react";
 import Form from "../Components/Form";
 import BugListItem from "../Components/BugListItem";
 
-interface IHomeProps {
+interface IBugListProps {
     bugList: Bug[];
     setBugList: React.Dispatch<SetStateAction<Bug[]>>;
     filteredBugList: Bug[];
@@ -11,7 +11,7 @@ interface IHomeProps {
     setSearchTerm: React.Dispatch<SetStateAction<string>>;
 }
 
-const Home: React.FC<IHomeProps> = ({
+const BugList: React.FC<IBugListProps> = ({
     bugList,
     setBugList,
     filteredBugList,
@@ -60,4 +60,4 @@ const Home: React.FC<IHomeProps> = ({
     );
 };
 
-export default Home;
+export default BugList;

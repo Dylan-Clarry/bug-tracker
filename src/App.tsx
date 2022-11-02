@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./Pages/Home";
+import BugList from "./Pages/BugList";
 import BugDetail from "./Pages/BugDetail";
+import Login from "./Pages/Login";
 
 const apiUrl = "http://localhost:6969/";
 
-function App() {
+function App(): React.ReactNode {
     function getBugsFromStorage(): Array<Bug> {
         return JSON.parse(localStorage.getItem("bugList") || "[]");
     }
@@ -107,7 +108,7 @@ function App() {
                     <Route
                         path="/"
                         element={
-                            <Home
+                            <BugList
                                 bugList={bugList}
                                 setBugList={setBugList}
                                 filteredBugList={filteredBugList}
@@ -117,6 +118,7 @@ function App() {
                             />
                         }
                     />
+                    <Route path="/login" element={<Login />}></Route>
                     <Route
                         path="/bug/:id"
                         element={
