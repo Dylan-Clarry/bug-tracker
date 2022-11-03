@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
+const apiUrl = "http://localhost:6969";
+
 export default function Login(): JSX.Element {
     const [userName, setUserName] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -10,8 +12,29 @@ export default function Login(): JSX.Element {
     const nav = useNavigate();
 
     async function handleLogin(): Promise<void> {
-        const 
-        nav("/home");
+        const opts = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: userName,
+                password: password,
+            }),
+        };
+        const url = apiUrl + "/user/login";
+        const res = await fetch(url, opts);
+        const json = await res.json();
+        if (json.error) {
+            console.error("Error logging in:", json.error);
+            return;
+        }
+
+        if (json.data && json.data.id) {
+            nav("/home");
+        } else {
+            alert("Failed login\nIncorrect login credentials");
+        }
     }
 
     function handleDemoLogin() {
@@ -33,7 +56,7 @@ export default function Login(): JSX.Element {
                     <div className="mb-3">
                         <input
                             placeholder="Password"
-                            type="password"
+                            type={hidden ? "password" : "text"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />

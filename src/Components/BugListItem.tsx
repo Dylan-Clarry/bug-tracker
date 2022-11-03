@@ -32,7 +32,7 @@ const BugListItem: React.FC<IBugEntryProps> = ({ bug, bugList }) => {
                         bugList: bugList,
                     }}
                 >
-                    <small className="text-xs">#{bug.id}</small>
+                    <small className="text-xs">Bug #{bug.id}</small>
                     <h1 className="text-lg underline">
                     {" " + bug.title}</h1>
                 </Link>
